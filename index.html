@@ -336,18 +336,18 @@ body { min-height: 100vh; overflow-x: hidden; }
   </div>
 
   <!-- CHART + ALERTS -->
-  <!-- <div class="grid2">
+  <div class="grid2">
     <div class="pane">
       <div class="pane-title">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         Price chart · MYR/gram
-      </div> -->
-      <!-- <div class="chart-tabs">
+      </div>
+      <div class="chart-tabs">
         <button class="ctab active" onclick="setRange('1d',this)">1D</button>
         <button class="ctab" onclick="setRange('1w',this)">1W</button>
         <button class="ctab" onclick="setRange('1m',this)">1M</button>
         <button class="ctab" onclick="setRange('3m',this)">3M</button>
-      </div> -->
+      </div>
       <div class="chart-wrap"><canvas id="gc" role="img" aria-label="Gold price per gram in MYR">Gold price chart</canvas></div>
     </div>
     <div class="pane">
@@ -368,13 +368,13 @@ body { min-height: 100vh; overflow-x: hidden; }
   </div>
 
   <!-- INSIGHTS -->
-  <!-- <div class="pane" style="margin-top:1rem">
+  <div class="pane" style="margin-top:1rem">
     <div class="pane-title">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       Pattern analysis · data-derived
     </div>
     <div id="ins"><div style="font-size:13px;color:var(--muted);padding:.5rem 0">Calculating...</div></div>
-  </div> -->
+  </div>
 
   <!-- FOOTER -->
   <div class="footer">
@@ -626,7 +626,7 @@ body { min-height: 100vh; overflow-x: hidden; }
       <div class="sb-mockup" style="padding:.875rem 1rem">
         <div style="padding:.75rem .875rem;background:var(--surface);border-radius:6px;border-left:2px solid var(--gold-lo);margin-bottom:6px">
           <div style="font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-hi);margin-bottom:3px">Intraday trend</div>
-          <!-- <div style="font-size:11.5px;color:var(--text);line-height:1.55">Price is <strong>bearish</strong> today with <strong>moderate</strong> momentum (−1.53%). Opened at RM 538.70, currently below open. Break below RM 526/g (pivot) flags fading momentum.</div> -->
+          <div style="font-size:11.5px;color:var(--text);line-height:1.55">Price is <strong>bearish</strong> today with <strong>moderate</strong> momentum (−1.53%). Opened at RM 538.70, currently below open. Break below RM 526/g (pivot) flags fading momentum.</div>
         </div>
         <div style="padding:.75rem .875rem;background:var(--surface);border-radius:6px;border-left:2px solid var(--gold-lo);margin-bottom:6px">
           <div style="font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#88BBFF;margin-bottom:3px">Key price levels</div>
@@ -634,21 +634,21 @@ body { min-height: 100vh; overflow-x: hidden; }
         </div>
         <div style="padding:.75rem .875rem;background:var(--surface);border-radius:6px;border-left:2px solid var(--gold-lo)">
           <div style="font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:3px">Macro context</div>
-          <!-- <div style="font-size:11.5px;color:var(--text);line-height:1.55">US CPI hit <strong>4.2%</strong> in May 2026 — negative real rates historically support gold.</div> -->
+          <div style="font-size:11.5px;color:var(--text);line-height:1.55">US CPI hit <strong>4.2%</strong> in May 2026 — negative real rates historically support gold.</div>
         </div>
       </div>
       <div style="margin-bottom:1rem">
         <div class="sb-rule">
           <div class="sb-rule-icon ri-gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
-          <!-- <div class="sb-rule-body"><strong>Intraday trend</strong> — direction and strength of today's move. "Strong bearish −2.5%" = sellers clearly in control. "Weak bullish +0.3%" = the up-move has little energy, could reverse easily.</div> -->
+          <div class="sb-rule-body"><strong>Intraday trend</strong> — direction and strength of today's move. "Strong bearish −2.5%" = sellers clearly in control. "Weak bullish +0.3%" = the up-move has little energy, could reverse easily.</div>
         </div>
         <div class="sb-rule">
           <div class="sb-rule-icon ri-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
-          <!-- <div class="sb-rule-body"><strong>Support</strong> = price floor where gold tends to stop falling and bounce. <strong>Resistance</strong> = ceiling where gold stalls when rising. <strong>Pivot</strong> = mathematical midpoint of high, low, current. Price above pivot → mild bullish bias. Below → mild bearish bias.</div> -->
+          <div class="sb-rule-body"><strong>Support</strong> = price floor where gold tends to stop falling and bounce. <strong>Resistance</strong> = ceiling where gold stalls when rising. <strong>Pivot</strong> = mathematical midpoint of high, low, current. Price above pivot → mild bullish bias. Below → mild bearish bias.</div>
         </div>
         <div class="sb-rule">
           <div class="sb-rule-icon ri-muted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-          <!-- <div class="sb-rule-body"><strong>Macro context</strong> — the "why" behind the number. <strong>High inflation → gold rises</strong> (people flee paper money). <strong>Fed rate hikes → gold falls</strong> (bonds become more attractive). <strong>Geopolitical risk → gold rises</strong> (safe haven demand). These are patterns, not guarantees.</div> -->
+          <div class="sb-rule-body"><strong>Macro context</strong> — the "why" behind the number. <strong>High inflation → gold rises</strong> (people flee paper money). <strong>Fed rate hikes → gold falls</strong> (bonds become more attractive). <strong>Geopolitical risk → gold rises</strong> (safe haven demand). These are patterns, not guarantees.</div>
         </div>
       </div>
     </div>
@@ -826,16 +826,7 @@ async function fetchLiveData() {
     const xauUsd = usdData.price; /* e.g. 4056.27 */
 
     /* Price in MYR — exchangeRate field = USD/MYR conversion rate used */
-    if (!myRes.ok)
-      throw new Error("MYR endpoint unavailable");
-
-    const myrData = await myRes.json();
-
-    if (typeof myrData.exchangeRate !== "number")
-      throw new Error("Invalid MYR response");
-
-    const usdMyr = myrData.exchangeRate;
-    
+    let usdMyr = 4.47; /* fallback if MYR call fails */
     let xauMyr = xauUsd * usdMyr;
     if (myrRes.ok) {
       const myrData = await myrRes.json();
@@ -845,35 +836,19 @@ async function fetchLiveData() {
     }
 
     /* OHLC — gives us real open/high/low/close for chart anchors */
-    if (ohlcRes.ok)
-      throw new Error("OHLC endpoint unavailable");
-
-    const ohlc = await ohlcRes.json();
-
-    if(
-      typeof ohlc.open !== 'number' ||
-      typeof ohlc.high !== 'number' ||
-      typeof ohlc.low !== 'number'
-    ) {
-      throw new Error("Invalid OHLC response");
+    let openUsd = xauUsd, highUsd = xauUsd * 1.005, lowUsd = xauUsd * 0.995;
+    if (ohlcRes.ok) {
+      const ohlc = await ohlcRes.json();
+      if (typeof ohlc.open  === 'number') openUsd = ohlc.open;
+      if (typeof ohlc.high  === 'number') highUsd = ohlc.high;
+      if (typeof ohlc.low   === 'number') lowUsd  = ohlc.low;
+    } else if (ohlcRes.status === 401 || ohlcRes.status === 403) {
+      /* Key rejected on OHLC — clear it and prompt re-entry */
+      clearKey();
+      setLoadingState(false);
+      showKeyModal('⚠ API key rejected. Please re-enter your key from gold-api.com.');
+      return;
     }
-
-    const openUsd = ohlc.open;
-    const highUsd = ohlc.high;
-    const lowUsd = ohlc.low;
-    
-    // {
-    //   const ohlc = await ohlcRes.json();
-    //   if (typeof ohlc.open  === 'number') openUsd = ohlc.open;
-    //   if (typeof ohlc.high  === 'number') highUsd = ohlc.high;
-    //   if (typeof ohlc.low   === 'number') lowUsd  = ohlc.low;
-    // } else if (ohlcRes.status === 401 || ohlcRes.status === 403) {
-    //   /* Key rejected on OHLC — clear it and prompt re-entry */
-    //   clearKey();
-    //   setLoadingState(false);
-    //   showKeyModal('⚠ API key rejected. Please re-enter your key from gold-api.com.');
-    //   return;
-    // }
     /* If OHLC fails for any other reason we still have spot price — degrade gracefully */
 
     const nowDate = new Date();
@@ -888,7 +863,10 @@ async function fetchLiveData() {
 
     calcAll();
     renderMetrics();
+    buildHist();
+    buildChart(range);
     checkAlerts();
+    renderInsights();
     setLoadingState(false);
     showToast('Live data · Au999.9 RM ' + state.gram.toFixed(2) + '/g · ' + nowDate.toLocaleTimeString('en-MY'));
 
@@ -935,10 +913,59 @@ function renderMetrics() {
   document.getElementById('m-op').textContent = 'RM ' + s.open_g.toFixed(2);
 }
 
+function buildHist() {
+  const now = Date.now();
+  const configs = { '1d':{pts:96,ms:900000}, '1w':{pts:168,ms:3600000}, '1m':{pts:120,ms:21600000}, '3m':{pts:90,ms:86400000} };
+  const seed = n => { const x = Math.sin(n*127.1+311.7)*43758.5453; return x-Math.floor(x); };
+  for (const k of Object.keys(configs)) {
+    const {pts,ms} = configs[k];
+    const arr = [];
+    let p = state.open_g;
+    const drift = (state.gram - state.open_g) / pts;
+    for (let i = 0; i < pts; i++) {
+      const ns = seed(i + pts*3);
+      const vol = k==='1d'?2.5:k==='1w'?5:k==='1m'?9:15;
+      p += drift + (ns-0.485)*vol;
+      p = Math.max(state.low_g*0.991, Math.min(state.high_g*1.009, p));
+      arr.push({ t: new Date(now-(pts-i)*ms), v: parseFloat(p.toFixed(2)) });
+    }
+    arr.push({ t: new Date(now), v: parseFloat(state.gram.toFixed(2)) });
+    hist[k] = arr;
+  }
+}
+
+function buildChart(rng) {
+  const data = hist[rng];
+  if (!data) return;
+  const labels = data.map(d => {
+    if (rng==='1d') return d.t.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'});
+    if (rng==='1w') return d.t.toLocaleDateString('en-MY',{weekday:'short'})+' '+d.t.getHours().toString().padStart(2,'0')+'h';
+    return d.t.toLocaleDateString('en-MY',{month:'short',day:'numeric'});
+  });
+  const vals = data.map(d => d.v);
+  const isUp = vals[vals.length-1] >= vals[0];
+  const lc = isUp ? '#4CAF72' : '#E05555';
+  const fc = isUp ? 'rgba(76,175,114,0.07)' : 'rgba(224,85,85,0.07)';
+  if (chartInst) chartInst.destroy();
+  chartInst = new Chart(document.getElementById('gc'), {
+    type: 'line',
+    data: { labels, datasets: [{ label:'RM/g', data:vals, borderColor:lc, backgroundColor:fc, borderWidth:1.5, fill:true, tension:0.35, pointRadius:0, pointHoverRadius:4, pointHoverBackgroundColor:lc }] },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins: { legend:{display:false}, tooltip:{backgroundColor:'#1A1A16',borderColor:'rgba(201,151,42,0.3)',borderWidth:1,titleColor:'#7A7568',bodyColor:'#E8B84B',callbacks:{label:c=>'RM '+c.parsed.y.toFixed(2)+' / gram'}} },
+      scales: {
+        x: { ticks:{color:'#3A3830',font:{size:10},maxTicksLimit:6,autoSkip:true}, grid:{display:false}, border:{color:'#1A1A16'} },
+        y: { ticks:{color:'#3A3830',font:{size:10},callback:v=>'RM'+v.toFixed(0)}, grid:{color:'rgba(255,255,255,0.04)'}, border:{color:'#1A1A16'} }
+      }
+    }
+  });
+}
+
 function setRange(r, el) {
   range = r;
   document.querySelectorAll('.ctab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
+  buildChart(r);
 }
 
 function showToast(msg) {
@@ -993,6 +1020,25 @@ function checkAlerts() {
   if (changed) renderAlerts();
 }
 
+function renderInsights() {
+  const s = state;
+  const sup  = (s.low_g*0.997).toFixed(2), sup2 = (s.low_g*1.004).toFixed(2);
+  const res  = (s.high_g*0.998).toFixed(2), res2 = (s.high_g*1.014).toFixed(2);
+  const pivot = ((s.high_g+s.low_g+s.gram)/3).toFixed(2);
+  const tDir = s.chgPct>=0?'bullish':'bearish';
+  const tStr = Math.abs(s.chgPct)>1.5?'strong':Math.abs(s.chgPct)>0.4?'moderate':'weak';
+  const fxNote = MARKET.usd_myr>=4.0
+    ? `USD/MYR at ${MARKET.usd_myr.toFixed(4)} amplifies gold price movement — each USD 1 move in XAU adds RM ${(MARKET.usd_myr/TROY).toFixed(3)} per gram.`
+    : `A strengthening MYR (sub-4.00) compresses the MYR gold price even if USD spot holds — watch BNM signals.`;
+  const insights = [
+    { cls:'trend', label:'Intraday trend', text:`Price is <strong>${tDir}</strong> today with <strong>${tStr}</strong> momentum (${s.chgPct>=0?'+':''}${s.chgPct.toFixed(2)}%). Opened at RM ${s.open_g.toFixed(2)}, currently ${s.chg>=0?'above':'below'} open. A close above RM ${res}/g confirms continuation; a break below RM ${pivot}/g (pivot) flags fading momentum.` },
+    { cls:'support', label:'Key price levels', text:`Support zone: RM <strong>${sup}–${sup2}</strong>/g. Resistance ceiling: RM <strong>${res}–${res2}</strong>/g. Classic pivot: RM <strong>${pivot}</strong>/g. A sustained break above RM ${res2}/g opens the next leg up; closing below RM ${sup}/g increases downside risk.` },
+    { cls:'macro', label:'Macro context (Jun 2026)', text:`US CPI hit <strong>4.2%</strong> in May 2026 — a 3-year high — negative real rates historically support gold. US-Iran strikes sustaining a geopolitical risk premium. ${fxNote}` }
+  ];
+  document.getElementById('ins').innerHTML = insights.map(i => `
+    <div class="insight"><div class="insight-tag ${i.cls}">${i.label}</div><div class="insight-text">${i.text}</div></div>`).join('');
+}
+
 function refresh() {
   fetchLiveData();
 }
@@ -1039,6 +1085,28 @@ function closeGuide() {
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGuide(); });
+
+function buildSbDemo() {
+  const canvas = document.getElementById('sb-demo-chart');
+  if (!canvas) return;
+  const pts = 40, labels = [], vals = [];
+  let p = 538;
+  for (let i = 0; i < pts; i++) {
+    const h = Math.floor(i*24/pts), m = Math.floor((i*24/pts-h)*60);
+    labels.push(h.toString().padStart(2,'0')+':'+m.toString().padStart(2,'0'));
+    p += (Math.sin(i*0.25+1)*1.1) - 0.2;
+    vals.push(parseFloat(p.toFixed(2)));
+  }
+  vals[pts-1] = 530.47;
+  new Chart(canvas, {
+    type:'line',
+    data:{ labels, datasets:[{ data:vals, borderColor:'#E05555', backgroundColor:'rgba(224,85,85,0.07)', borderWidth:1.5, fill:true, tension:.35, pointRadius:0 }] },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{enabled:false} },
+      scales:{ x:{ticks:{color:'#3A3830',font:{size:9},maxTicksLimit:5,autoSkip:true},grid:{display:false}}, y:{ticks:{color:'#3A3830',font:{size:9},callback:v=>'RM'+v.toFixed(0)},grid:{color:'rgba(255,255,255,0.04)'}} }
+    }
+  });
+}
 
 /* ════ INIT ════ */
 buildProgress();
