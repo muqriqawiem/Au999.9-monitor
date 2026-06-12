@@ -396,43 +396,30 @@ body { min-height: 100vh; overflow-x: hidden; }
       </div>
       <div>
         <div class="key-box-title">Connect live gold data</div>
-        <div class="key-box-sub">Free API key · gold-api.com · Takes 2 minutes</div>
+        <div class="key-box-sub">Free API key · gold-api.com · 2 minutes setup</div>
       </div>
     </div>
-
-    <!-- file:// warning banner — shown dynamically -->
-    <div id="file-warning" style="display:none;background:rgba(224,85,85,0.08);border:0.5px solid rgba(224,85,85,0.25);border-radius:7px;padding:.75rem 1rem;margin-bottom:1rem;">
-      <div style="font-size:11px;font-weight:600;color:#E05555;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">⚠ You are opening this as a file:// — CORS will block the API</div>
-      <div style="font-size:12px;color:var(--muted);line-height:1.6">Browsers block API calls from files opened directly. You must run a local server first:<br><br>
-        <strong style="color:var(--text)">Option 1 — Python (easiest, no install):</strong><br>
-        Open Terminal / Command Prompt in the folder containing this HTML file, then run:<br>
-        <code style="display:block;background:rgba(255,255,255,0.06);color:var(--gold-hi);padding:6px 10px;border-radius:5px;margin:5px 0;font-family:monospace;font-size:12px">python -m http.server 8000</code>
-        Then open <code style="color:var(--gold-hi);font-family:monospace">http://localhost:8000</code> in your browser.<br><br>
-        <strong style="color:var(--text)">Option 2 — VS Code:</strong> Install the <strong>Live Server</strong> extension → right-click the HTML file → <em>Open with Live Server</em>.
-      </div>
-    </div>
-
     <div class="key-steps">
       <div class="key-step">
         <div class="key-step-num">1</div>
-        <div class="key-step-txt">Go to <a href="https://gold-api.com" target="_blank">gold-api.com</a> → <strong>Sign Up</strong> — completely free, no credit card needed.</div>
+        <div class="key-step-txt">Go to <a href="https://gold-api.com" target="_blank">gold-api.com</a> → click <strong>Sign Up</strong>. Completely free, no credit card.</div>
       </div>
       <div class="key-step">
         <div class="key-step-num">2</div>
-        <div class="key-step-txt">After signing in, your API key is shown on the dashboard homepage. Copy it.</div>
+        <div class="key-step-txt">After signing in, your API key is displayed on the dashboard homepage. <strong>Copy the full key.</strong></div>
       </div>
       <div class="key-step">
         <div class="key-step-num">3</div>
-        <div class="key-step-txt">Paste below and click <strong>Connect</strong>. Saved locally — you only do this once.</div>
+        <div class="key-step-txt">Paste it below and click <strong>Connect</strong>. Saved in this browser — one time only.</div>
       </div>
     </div>
     <div class="key-error" id="key-error"></div>
     <div class="key-input-row">
-      <input class="key-input" id="key-input" type="text" placeholder="Paste your gold-api.com API key…" autocomplete="off" spellcheck="false" />
+      <input class="key-input" id="key-input" type="text" placeholder="Paste your API key here…" autocomplete="off" spellcheck="false" />
       <button class="key-submit" id="key-submit" onclick="submitKey()">Connect</button>
     </div>
     <div class="key-note">
-      Your key is stored only in this browser's localStorage — never sent anywhere except directly to api.gold-api.com. Data: real-time XAU/USD spot → converted to RM/gram.
+      Your key is stored only in this browser's localStorage — never sent anywhere except directly to api.gold-api.com. The key is only used for the OHLC (open/high/low/close) endpoint. Live price data requires no authentication.
     </div>
   </div>
 </div>
@@ -734,152 +721,144 @@ let range = '1d';
 let hist = {};
 let toastTimer = null;
 
-/* ── API KEY MANAGEMENT ── */
+/* ════════════════════════════════════════════════
+   GOLD-API.COM — CORRECT IMPLEMENTATION
+   Per official docs at https://gold-api.com/docs:
+
+   GET /price/{symbol}/{?currency}
+     → NO auth required
+     → Returns: price, exchangeRate, currency, updatedAt
+
+   GET /ohlc/{symbol}?startTimestamp=&endTimestamp=
+     → Requires header: x-api-key: YOUR_KEY
+     → Returns: open, high, low, close
+
+   Strategy:
+   1. /price/XAU      → spot price in USD  (no key)
+   2. /price/XAU/MYR  → spot price in MYR  (no key) — exchangeRate field = USD/MYR
+   3. /ohlc/XAU       → today's OHLC       (needs key, used for chart anchors)
+   API key is ONLY needed for OHLC. Price endpoints are fully free.
+════════════════════════════════════════════════ */
+
+const GOLD_API = 'https://api.gold-api.com';
 const STORAGE_KEY = 'au999_goldapi_key';
 
 function getSavedKey() {
   try { return localStorage.getItem(STORAGE_KEY) || ''; } catch(e) { return ''; }
 }
-
 function saveKey(k) {
   try { localStorage.setItem(STORAGE_KEY, k.trim()); } catch(e) {}
 }
-
 function clearKey() {
   try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
 }
+function isFileProtocol() {
+  return window.location.protocol === 'file:';
+}
 
-/* ── API KEY SETUP MODAL ── */
+/* ── MODAL ── */
 function showKeyModal(msg) {
   document.getElementById('key-modal').style.display = 'flex';
   if (msg) document.getElementById('key-error').textContent = msg;
 }
-
 function hideKeyModal() {
   document.getElementById('key-modal').style.display = 'none';
   document.getElementById('key-error').textContent = '';
 }
 
-/* ── CORS PROXY & URL HELPERS ── */
-const GOLD_API_BASE = 'https://api.gold-api.com';
-const PROXY = 'https://api.allorigins.win/raw?url=';
-
-function isFileProtocol() {
-  return window.location.protocol === 'file:';
-}
-
-/* Build fetch URL — use proxy when running from file:// */
-function apiUrl(path) {
-  const url = GOLD_API_BASE + path;
-  return isFileProtocol() ? PROXY + encodeURIComponent(url) : url;
-}
-
-/* Build fetch options — proxy carries key as query param since
-   custom headers are stripped by allorigins; direct calls use header */
-function apiFetchOpts(key) {
-  if (isFileProtocol()) {
-    /* allorigins strips custom headers — append key as query param instead */
-    return { method: 'GET' };
-  }
-  return { headers: { 'x-access-token': key } };
-}
-
-function apiUrlWithKey(path, key) {
-  const base = GOLD_API_BASE + path;
-  const withKey = base + (base.includes('?') ? '&' : '?') + 'x-access-token=' + encodeURIComponent(key);
-  return isFileProtocol() ? PROXY + encodeURIComponent(withKey) : base;
-}
-
 async function submitKey() {
   const k = document.getElementById('key-input').value.trim();
   if (!k) { document.getElementById('key-error').textContent = 'Please paste your API key above.'; return; }
-  document.getElementById('key-submit').textContent = 'Verifying...';
-  document.getElementById('key-submit').disabled = true;
+  const btn = document.getElementById('key-submit');
+  btn.textContent = 'Verifying…'; btn.disabled = true;
 
-  /* Detect file:// early and warn — we'll try anyway via proxy */
-  if (isFileProtocol()) {
-    document.getElementById('key-error').textContent = '⚠ Running from file:// — using proxy. For best results use a local server (see instructions below).';
-  }
-
-  const ok = await testKey(k);
+  /* Test: hit /ohlc/XAU with x-api-key header — the one endpoint that actually requires auth */
+  const ok = await testOhlcKey(k);
   if (ok) {
     saveKey(k);
     hideKeyModal();
     document.getElementById('key-input').value = '';
     fetchLiveData();
   } else {
-    const isFile = isFileProtocol();
-    document.getElementById('key-error').textContent = isFile
-      ? '❌ Could not reach API via proxy. Start a local server (see instructions below) or check your key.'
-      : '❌ Key invalid or API unreachable. Double-check your key from gold-api.com.';
-    document.getElementById('key-submit').textContent = 'Connect';
-    document.getElementById('key-submit').disabled = false;
+    document.getElementById('key-error').textContent = '❌ Key not accepted by /ohlc endpoint. Check you copied the full key from gold-api.com dashboard.';
+    btn.textContent = 'Connect'; btn.disabled = false;
   }
 }
 
-async function testKey(k) {
+async function testOhlcKey(k) {
+  /* /ohlc/XAU requires x-api-key — use a 24h window to get today's OHLC */
   try {
-    const url = apiUrlWithKey('/price/XAU', k);
-    const opts = isFileProtocol() ? {} : { headers: { 'x-access-token': k } };
-    const r = await fetch(url, opts);
+    const now = Math.floor(Date.now() / 1000);
+    const start = now - 86400;
+    const url = `${GOLD_API}/ohlc/XAU?startTimestamp=${start}&endTimestamp=${now}`;
+    const r = await fetch(url, { headers: { 'x-api-key': k } });
     if (!r.ok) return false;
     const d = await r.json();
-    return d && typeof d.price === 'number';
+    /* Response should have open, high, low, close as numbers */
+    return d && typeof d.open === 'number' && typeof d.high === 'number';
   } catch(e) { return false; }
 }
 
-/* ── LIVE DATA FETCH ── */
+/* ── MAIN LIVE DATA FETCH ── */
 async function fetchLiveData() {
   const key = getSavedKey();
   if (!key) { showKeyModal(); return; }
-
   setLoadingState(true);
 
   try {
-    const goldUrl = apiUrlWithKey('/price/XAU', key);
-    const myrUrl  = apiUrlWithKey('/price/MYR', key);
-    const fetchOpts = isFileProtocol() ? {} : { headers: { 'x-access-token': key } };
+    const now = Math.floor(Date.now() / 1000);
+    const dayStart = now - 86400;
 
-    /* Fetch gold price (XAU/USD) + forex (USD/MYR) in parallel */
-    const [goldRes, fxRes] = await Promise.all([
-      fetch(goldUrl, fetchOpts),
-      fetch(myrUrl,  fetchOpts)
+    /* ── Step 1: Spot price in USD — NO auth required ── */
+    /* ── Step 2: Spot price in MYR — NO auth required, exchangeRate = USD/MYR ── */
+    /* ── Step 3: OHLC for today — requires x-api-key header ── */
+    const [usdRes, myrRes, ohlcRes] = await Promise.all([
+      fetch(`${GOLD_API}/price/XAU`),
+      fetch(`${GOLD_API}/price/XAU/MYR`),
+      fetch(`${GOLD_API}/ohlc/XAU?startTimestamp=${dayStart}&endTimestamp=${now}`, {
+        headers: { 'x-api-key': key }
+      })
     ]);
 
-    if (!goldRes.ok) {
-      if (goldRes.status === 401 || goldRes.status === 403) {
-        clearKey();
-        showKeyModal('API key rejected. Please re-enter your key.');
-        setLoadingState(false);
-        return;
-      }
-      throw new Error('Gold API error: ' + goldRes.status);
+    /* Price in USD — no auth so failure = network issue */
+    if (!usdRes.ok) throw new Error('Price endpoint error: ' + usdRes.status);
+    const usdData = await usdRes.json();
+    const xauUsd = usdData.price; /* e.g. 4056.27 */
+
+    /* Price in MYR — exchangeRate field = USD/MYR conversion rate used */
+    let usdMyr = 4.47; /* fallback if MYR call fails */
+    let xauMyr = xauUsd * usdMyr;
+    if (myrRes.ok) {
+      const myrData = await myrRes.json();
+      /* exchangeRate = how many MYR per USD, price = XAU price in MYR */
+      if (typeof myrData.price === 'number')       xauMyr  = myrData.price;
+      if (typeof myrData.exchangeRate === 'number') usdMyr  = myrData.exchangeRate;
     }
 
-    const gold = await goldRes.json();
-    const xauUsd  = gold.price;
-    const openUsd = gold.open_price || gold.prev_close_price || xauUsd;
-    const highUsd = gold.high_price || xauUsd * 1.005;
-    const lowUsd  = gold.low_price  || xauUsd * 0.995;
-
-    /* gold-api /price/MYR returns gold priced in MYR per troy oz
-       USD/MYR rate = MYR_price ÷ USD_price */
-    let usdMyr = 4.47;
-    if (fxRes.ok) {
-      const fx = await fxRes.json();
-      if (fx && typeof fx.price === 'number' && fx.price > 0) {
-        usdMyr = parseFloat((fx.price / xauUsd).toFixed(4));
-      }
+    /* OHLC — gives us real open/high/low/close for chart anchors */
+    let openUsd = xauUsd, highUsd = xauUsd * 1.005, lowUsd = xauUsd * 0.995;
+    if (ohlcRes.ok) {
+      const ohlc = await ohlcRes.json();
+      if (typeof ohlc.open  === 'number') openUsd = ohlc.open;
+      if (typeof ohlc.high  === 'number') highUsd = ohlc.high;
+      if (typeof ohlc.low   === 'number') lowUsd  = ohlc.low;
+    } else if (ohlcRes.status === 401 || ohlcRes.status === 403) {
+      /* Key rejected on OHLC — clear it and prompt re-entry */
+      clearKey();
+      setLoadingState(false);
+      showKeyModal('⚠ API key rejected. Please re-enter your key from gold-api.com.');
+      return;
     }
+    /* If OHLC fails for any other reason we still have spot price — degrade gracefully */
 
-    const now = new Date();
+    const nowDate = new Date();
     MARKET = {
       xau_usd:  parseFloat(xauUsd.toFixed(2)),
-      usd_myr:  usdMyr,
+      usd_myr:  parseFloat(usdMyr.toFixed(4)),
       open_usd: parseFloat(openUsd.toFixed(2)),
       high_usd: parseFloat(highUsd.toFixed(2)),
       low_usd:  parseFloat(lowUsd.toFixed(2)),
-      date: now.toLocaleDateString('en-MY', { day:'numeric', month:'short', year:'numeric' })
+      date: nowDate.toLocaleDateString('en-MY', { day:'numeric', month:'short', year:'numeric' })
     };
 
     calcAll();
@@ -889,12 +868,12 @@ async function fetchLiveData() {
     checkAlerts();
     renderInsights();
     setLoadingState(false);
-    showToast('Live data loaded · ' + now.toLocaleTimeString('en-MY'));
+    showToast('Live data · Au999.9 RM ' + state.gram.toFixed(2) + '/g · ' + nowDate.toLocaleTimeString('en-MY'));
 
   } catch(err) {
     setLoadingState(false);
-    showToast('Fetch failed — check your connection and retry.');
-    console.error('fetchLiveData error:', err);
+    showToast('⚠ Fetch error — check console for details.');
+    console.error('[Au999 Dashboard] fetchLiveData error:', err);
   }
 }
 
